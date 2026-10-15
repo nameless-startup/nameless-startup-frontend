@@ -1,0 +1,80 @@
+// Units
+@import "units";
+
+// Reset
+@import "reset";
+
+// Responsive
+@import "abstracts/breakpoints";
+
+// Variables
+@import "variables";
+
+// Components
+@import "components/accordion";
+@import "components/avatar-shell";
+@import "components/buttons";
+@import "components/calendar";
+@import "components/categories";
+@import "components/chat";
+@import "components/header";
+@import "components/inputs";
+@import "components/mega-menu";
+@import "components/minimal-slider";
+@import "components/payment-method";
+@import "components/plans";
+@import "components/product-showcase";
+@import "components/form";
+@import "components/discount";
+@import "components/quantity";
+@import "components/scrollbar";
+@import "components/select";
+@import "components/sold-factors";
+@import "components/statics";
+@import "components/text-area";
+@import "components/theme-toggle";
+@import "components/time-picker";
+@import "components/upload";
+@import "components/wallet-cover";
+@import "components/week-days-picker";
+
+// Pages
+@import "pages/login";
+
+// Utilities
+@import "utilities/absolute";
+@import "utilities/animation";
+@import "utilities/backdrop";
+@import "utilities/icons";
+@import "utilities/logos";
+@import "utilities/spacing";
+@import "utilities/structure";
+@import "utilities/styling";
+@import "utilities/typography";
+@import "utilities/coloring";
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+body {
+  margin: 0;
+
+  background-color: var(--color-background);
+
+  color: var(--color-text);
+}
+
+footer {
+  .line-wrapper {
+    width: 1px;
+  }
+}

@@ -1,0 +1,32 @@
+.product-gallery-main {
+    overflow: hidden;
+  
+    img {
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+  }
+  
+  .product-gallery-thumbs {
+    overflow: hidden;
+  
+    .swiper-slide {
+      opacity: 0.5;
+      cursor: pointer;
+  
+      transition: 0.2s;
+  
+      img {
+        aspect-ratio: 16/10;
+        object-fit: cover;
+      }
+    }
+  
+    .swiper-slide-thumb-active {
+      opacity: 1;
+  
+      img {
+        border: 2px solid var(--color-primary);
+      }
+    }
+  }

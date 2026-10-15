@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nameless-project",
+  "compatibility_date": "2026-10-06",
+  "observability": {
+    "enabled": true
+  },
+  // Serve the static site from the repository root.
+  // Files/folders listed in ".assetsignore" are excluded from the upload
+  // (most importantly "node_modules", which contains a 129 MiB binary that
+  // exceeds Cloudflare's 25 MiB per-file asset limit).
+  "assets": {
+    "directory": "."
+  }
+}

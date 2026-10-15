@@ -1,0 +1,28 @@
+.primary-scrollbar {
+    &::-webkit-scrollbar {
+      width: 0.3rem;
+      border-radius: 10px;
+  
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+  
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--color-primary);
+    }
+  }
+
+  .primary-scrollbar-space {
+    &::-webkit-scrollbar-track {
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+  }

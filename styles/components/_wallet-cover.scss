@@ -1,0 +1,15 @@
+.wallet-cover {
+    background-color: var(--color-primary);
+    background-image: linear-gradient(
+      135deg,
+      var(--color-primary) 0%,
+      var(--color-primary-hover) 100%
+    );
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+    border-radius: 1.5rem;
+    @media (max-width:800px) {
+        border-radius: 1rem;
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  },
+  "devDependencies": {
+    "sass": "^1.99.0",
+    "wrangler": "^4.149.0"
+  }
+}
+

@@ -1,0 +1,23 @@
+.swiper-button-prev,
+.swiper-button-next {
+  width: 50px;
+  height: 50px;
+
+  svg {
+    width: 0.5rem;
+
+    path {
+      stroke: var(--color-text);
+    }
+  }
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--divider-color);
+  opacity: 0.8;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--color-primary);
+  opacity: 1;
+}

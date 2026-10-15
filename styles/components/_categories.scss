@@ -1,0 +1,53 @@
+.categories {
+  width: 100%;
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    transform: rotate(180deg);
+    position: static !important;
+
+    width: 50px;
+    height: 50px;
+
+    margin: 0;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 0.5rem;
+
+      path {
+        stroke: var(--color-text);
+        transition: stroke 0.3s ease;
+      }
+    }
+
+    &:hover {
+      svg path {
+        stroke: var(--color-primary);
+      }
+    }
+  }
+
+  .categories-viewport {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .categories-swiper {
+    width: 100%;
+  }
+}
+
+// Add adverstitment categories 
+
+.active-category {
+  border-top: 1px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}

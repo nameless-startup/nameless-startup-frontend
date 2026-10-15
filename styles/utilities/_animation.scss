@@ -1,0 +1,479 @@
+// ===============================
+// VISIBILITY UTILITIES
+// ===============================
+
+.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+}
+
+.show {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.3s ease-out;
+}
+
+.fade {
+  transition: opacity 0.3s ease-in-out;
+}
+
+// ===============================
+// DRAWER UTILITES
+// ===============================
+
+.drawer {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.drawer.is-closed {
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+.drawer.is-open {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+@each $name, $size in $breakpoints {
+  @media (max-width: $size) {
+
+    .#{$name}-drawer {
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .#{$name}-is-closed {
+      transform: translateX(100%);
+      pointer-events: none;
+    }
+
+    .#{$name}-is-open {
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+  }
+}
+
+// ===============================
+// FLIP UTILITIES
+// ===============================
+
+.flip-x {
+  transform: scaleX(-1);
+}
+
+.flip-y {
+  transform: scaleY(-1);
+}
+
+.flip-both {
+  transform: scale(-1);
+}
+
+// ===============================
+// TRANSFORM ANIMATIONS
+// ===============================
+
+.spin {
+  animation: spin 3s linear infinite;
+}
+
+// Optional: slower / faster variants
+.spin-fast {
+  animation: spin 1.5s linear infinite;
+}
+
+.spin-slow {
+  animation: spin 6s linear infinite;
+}
+
+// ===============================
+// KEYFRAMES
+// ===============================
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ===============================
+// FADE ANIMATIONS
+// ===============================
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+
+// ===============================
+// SCALE ANIMATIONS
+// ===============================
+
+.hover-scale-up {
+  .scale-up {
+    transition: transform 0.5s ease-in-out;
+  }
+
+  &:hover .scale-up {
+    transform: scale(1.05);
+  }
+}
+
+// ===============================
+// BASIC TRANSLATES
+// ===============================
+
+.translate-x-right {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.translate-x-left {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.translate-y-top {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.translate-y-bottom {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.translate-none {
+  transform: translate(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+// ===============================
+// SWIPE ANIMATIONS
+// ===============================
+
+@keyframes swipeInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes swipeOutTop {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes swipeInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes swipeOutBottom {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes swipeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes swipeOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes swipeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes swipeOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+// ===============================
+// SWIPE UTILITIES
+// ===============================
+
+.swipe-in-right {
+  animation: swipeInRight 0.3s ease-out forwards;
+}
+
+.swipe-out-right {
+  animation: swipeOutRight 0.3s ease-out forwards;
+}
+
+.swipe-in-left {
+  animation: swipeInLeft 0.3s ease-out forwards;
+}
+
+.swipe-out-left {
+  animation: swipeOutLeft 0.3s ease-out forwards;
+}
+
+.swipe-in-top {
+  animation: swipeInTop 0.3s ease-out forwards;
+}
+
+.swipe-out-top {
+  animation: swipeOutTop 0.3s ease-out forwards;
+}
+
+.swipe-in-bottom {
+  animation: swipeInBottom 0.3s ease-out forwards;
+}
+
+.swipe-out-bottom {
+  animation: swipeOutBottom 0.3s ease-out forwards;
+}
+
+.swipe-in-right,
+.swipe-out-right,
+.swipe-in-left,
+.swipe-out-left,
+.swipe-in-top,
+.swipe-out-top,
+.swipe-in-bottom,
+.swipe-out-bottom {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+}
+
+
+// ===============================
+// BACKGROUND CHANGE
+// ===============================
+
+.hover-parent-bg-primary-light {
+  .hover-target {
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  &:hover .hover-target {
+    background-color: var(--color-primary-light);
+  }
+}
+
+.hover-parent-bg-accent {
+  .hover-target {
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  &:hover .hover-target {
+    background-color: var(--color-accent);
+  }
+}
+
+.hover-bg-primary-light {
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+}
+
+.hover-bg-background-alt {
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-background-alt);
+  }
+}
+
+// ===============================
+// BORDER EFFECTS
+// ===============================
+.hover-border-red {
+  transition: border 0.3s ease-in-out;
+
+  &:hover {
+    border-color: red;
+  }
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.rainbow-border {
+  --angle: 0deg;
+  --border-width: 2px;
+
+  position: relative;
+  background: var(--background);
+}
+
+.rainbow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--border-width);
+  border-radius: inherit;
+
+  background: inherit;
+  filter: blur(1px);
+  opacity: 0.5;
+
+  background: conic-gradient(
+    from var(--angle),
+    #ff0000,
+    #ff8800,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0066ff,
+    #aa00ff,
+    #ff00aa,
+    #ff0000
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+
+  animation: rainbow-rotate 4s linear infinite;
+}
+
+@keyframes rainbow-rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+// ===============================
+// HOVER FADE
+// ===============================
+
+.hover-fade-in {
+  .fade-target {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &:hover .fade-target {
+    opacity: 1;
+  }
+}
+
+.hover-fade-out {
+  .fade-target {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &:hover .fade-target {
+    opacity: 0;
+  }
+}
+
+// ===============================
+// TRANSITION
+// ===============================
+
+.tranistion-all {
+  transition: all 0.3s ease-in-out;
+}
+
+

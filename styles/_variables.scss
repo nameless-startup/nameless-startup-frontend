@@ -1,0 +1,203 @@
+// =====================================================
+// LIGHT THEME
+// =====================================================
+
+:root {
+    // =========================
+    // EXISTING COLORS
+    // =========================
+  
+    --color-primary: #00c2a8;
+    --color-primary-hover: #00a891;
+    --color-primary-light: #e6f8f5;
+    --color-primary-light-hover: #d0f2ec;
+  
+    --color-secondary: #0a9c88;
+    --color-accent: #04413a;
+  
+    --color-text: #141414;
+    --color-text-inverse: #fafafa;
+    --color-text-muted: #6c6c6c;
+  
+    --color-border: rgba(37, 37, 37, 0.104);
+  
+    --color-background: #fefefe;
+    --color-background-alt: #f9f9fb;
+  
+    --color-background-transparent: #fefefeba;
+  
+    --color-background-subtle: #f6f3f9;
+  
+    --color-background-surface: #1b222c;
+    --color-surface-alt: #42474e;
+  
+    // =========================
+    // NEW VARIABLES
+    // =========================
+  
+    // Cards
+    --card-background: #ffffff;
+    --card-background-hover: #f7f7f9;
+  
+    // Inputs
+    --input-background: #ffffff;
+    --input-background-hover: #fafafa;
+  
+    --input-border: rgba(37, 37, 37, 0.1);
+    --input-border-focus: #00c2a8;
+  
+    --input-placeholder: #8a8a8a;
+  
+    // Shadows
+    --shadow-sm:rgba(0, 0, 0, 0.05);
+  
+    --shadow-md:rgba(0, 0, 0, 0.08);
+  
+    --shadow-lg:rgba(0, 0, 0, 0.12);
+  
+    // Glass Effects
+    --glass-background: rgba(255, 255, 255, 0.72);
+  
+    --glass-background-strong: rgba(255, 255, 255, 0.88);
+  
+    --glass-border: rgba(255, 255, 255, 0.35);
+  
+    // Overlays
+    --overlay-dark: rgba(0, 0, 0, 0.45);
+  
+    --overlay-light: rgba(255, 255, 255, 0.55);
+  
+    // Header / Navbar
+    --header-background: rgba(255, 255, 255, 0.78);
+  
+    --header-border: rgba(37, 37, 37, 0.08);
+    --header-shadow: rgba(0, 0, 0, 0.05);
+  
+    // Dropdown / Modal
+    --dropdown-background: #ffffff;
+    --dropdown-border: rgba(37, 37, 37, 0.08);
+  
+    --modal-background: #ffffff;
+    --modal-border: rgba(37, 37, 37, 0.08);
+  
+    // Dividers
+    --divider-color: rgba(37, 37, 37, 0.08);
+  
+    // Icons
+    --icon-color: #232323;
+    --icon-muted: #7c7c7c;
+  
+    // Scrollbar
+    --scrollbar-track: #f1f1f1;
+    --scrollbar-thumb: var(--color-primary);
+  }
+  
+  // =====================================================
+  // DARK THEME
+  // =====================================================
+  
+  [data-theme="dark"] {
+    // =========================
+    // EXISTING COLORS (UNCHANGED STRUCTURE)
+    // =========================
+  
+    --color-primary: #2ad9c0;
+    --color-primary-hover: #3fe6cf;
+    --color-primary-light: rgba(42, 217, 192, 0.12);
+    --color-primary-light-hover: rgba(42, 217, 192, 0.18);
+  
+    --color-secondary: #16bfa9;
+    --color-accent: #7fe9d9;
+  
+    --color-text: #f4f4f5;
+    --color-text-inverse: #ffffff;
+    --color-text-muted: #9a9aa1;
+  
+    /* FIXED: stronger border so it actually shows */
+    --color-border: rgba(255, 255, 255, 0.14);
+  
+    /* FIXED: slightly lighter background so shadows work */
+    --color-background: #1f2228;
+    --color-background-alt: #2a2f3a;
+    --color-background-transparent: rgba(17, 18, 20, 0.72);
+    --color-background-subtle: #1a1d22;
+    --color-background-surface: #262b33;
+    --color-surface-alt: #2f3540;
+  
+    // =========================
+    // NEW VARIABLES (FIXED VALUES ONLY)
+    // =========================
+  
+    // Cards (slightly brighter = better shadow contrast)
+    --card-background: #232832;
+    --card-background-hover: #2a313d;
+  
+    // Inputs (same idea: lift slightly)
+    --input-background: #1f232b;
+    --input-background-hover: #262c36;
+  
+    --input-border: rgba(255, 255, 255, 0.12);
+    --input-border-focus: #2ad9c0;
+    --input-placeholder: #8a8a91;
+  
+    // =========================
+    // SHADOWS (THIS IS THE MAIN FIX)
+    // =========================
+  
+    --shadow-sm: rgba(42, 217, 192, 0.25);
+    --shadow-md: rgba(0, 0, 0, 0.55);
+    --shadow-lg: rgba(0, 0, 0, 0.65);
+  
+    // =========================
+    // GLASS (UNCHANGED IDEA, SLIGHTLY STRONGER)
+    // =========================
+  
+    --glass-background: rgba(28, 30, 36, 0.78);
+    --glass-background-strong: rgba(28, 30, 36, 0.90);
+    --glass-border: rgba(255, 255, 255, 0.08);
+  
+    // =========================
+    // OVERLAYS
+    // =========================
+  
+    --overlay-dark: rgba(0, 0, 0, 0.70);
+    --overlay-light: rgba(255, 255, 255, 0.08);
+  
+    // =========================
+    // HEADER (slightly stronger separation)
+    // =========================
+  
+    --header-background: #262b33;
+    --header-border: rgba(255, 255, 255, 0.10);
+    --header-shadow: rgba(0, 0, 0, 0);
+  
+    // =========================
+    // DROPDOWNS / MODALS
+    // =========================
+  
+    --dropdown-background: #22262f;
+    --dropdown-border: rgba(255, 255, 255, 0.10);
+  
+    --modal-background: #22262f;
+    --modal-border: rgba(255, 255, 255, 0.10);
+  
+    // =========================
+    // DIVIDERS
+    // =========================
+  
+    --divider-color: rgba(255, 255, 255, 0.10);
+  
+    // =========================
+    // ICONS
+    // =========================
+  
+    --icon-color: #f4f4f5;
+    --icon-muted: #9a9aa1;
+  
+    // =========================
+    // SCROLLBAR
+    // =========================
+  
+    --scrollbar-track: #2a2a2a;
+    --scrollbar-thumb: var(--color-primary);
+  }

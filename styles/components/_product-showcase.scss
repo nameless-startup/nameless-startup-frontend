@@ -1,0 +1,10 @@
+.swiper-showcase {
+  position: relative;
+  .swiper-pagination {
+    bottom: -0.5%;
+    .swiper-pagination-bullet-active {
+      width: 20px;
+      border-radius: 20px;
+    }
+  }
+}

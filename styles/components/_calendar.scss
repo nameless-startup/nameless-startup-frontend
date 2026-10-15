@@ -1,0 +1,225 @@
+/* =========================
+   CALENDAR WRAPPER
+========================= */
+.calendar-wrapper {
+    width: 100%;
+  
+    padding: 24px;
+  
+    border-radius: 24px;
+  
+    background: var(--color-background-alt);
+  
+    border: 1px solid var(--input-border);
+  
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+
+    font-family: sans;
+
+    @media (max-width: map-get($breakpoints, lg)) {
+      padding: 0px;
+      border: unset;
+    }
+  }
+
+  /* =========================
+     HEADER
+  ========================= */
+  .calendar-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    margin-bottom: 16px;
+  
+    h3 {
+      font-family: Peyda;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+  
+    button {
+      width: 40px;
+      height: 40px;
+  
+      border-radius: 12px;
+      border: none;
+  
+      background: var(--color-background);
+  
+      cursor: pointer;
+  
+      transition: 0.2s ease;
+  
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
+    }
+  }
+  
+  /* =========================
+     WEEKDAYS
+  ========================= */
+  .weekdays {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 10px;
+  
+    span {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+    }
+  }
+  
+  /* =========================
+     GRID
+  ========================= */
+  .calendar-days {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+  
+  /* =========================
+     DAY BASE (FIXED LAYERING)
+  ========================= */
+  .day {
+    border:1px solid var(--input-border);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    border-radius: 16px;
+  
+    cursor: pointer;
+  
+    position: relative;
+    isolation: isolate;
+  
+    transition: transform 0.2s ease, background 0.2s ease;
+  
+    color: var(--color-text);
+  
+    z-index: 1;
+  
+    @media (max-width: map-get($breakpoints, md)) {
+      padding: 10px;
+      border-radius: 12px;
+    }
+  }
+  
+  /* hover */
+  .day:hover {
+    transform: scale(1.03);
+  }
+  
+  /* =========================
+     DISABLED / BOOKED
+  ========================= */
+  .day.disabled {
+    pointer-events: none;
+    background-color: rgba(255, 0, 0, 0.499);
+    color: white;
+  }
+  
+  /* =========================
+     SELECTED (START / END)
+  ========================= */
+  .day.selected {
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    z-index: 3;
+  }
+  
+  .day.selected::before {
+    display: none;
+  }
+  
+  /* =========================
+     RANGE (FIXED)
+  ========================= */
+  .day.in-range {
+    color: var(--color-text-inverse);
+    background-color: var(--color-primary);
+  }
+  
+  .day.in-range::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+  
+    background: rgba(var(--color-primary-rgb), 0.16);
+  
+    border-radius: 16px;
+  
+    z-index: 0; /* FIXED (NOT -1) */
+  }
+  
+  /* ensure text is always above range */
+  .day > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* =========================
+     BOOKING SUMMARY
+  ========================= */
+  .booking-summary {
+
+    width: 100%;
+    font-family: peyda;
+    
+    h4 {
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+  
+    margin-top: 8px;
+  
+    color: var(--color-text);
+  }
+  
+  .total {
+    font-size: 18px;
+    font-weight: 700;
+
+    background-color: transparent;
+
+    color: var(--color-text);
+  
+    border-radius: 10px;
+  
+    border: 1px solid var(--color-border);
+  
+    padding: 12px 20px 12px 20px;
+  }
+  
+  /* =========================
+     DARK MODE
+  ========================= */
+  [data-theme="dark"] {
+    .calendar-wrapper {
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+  }

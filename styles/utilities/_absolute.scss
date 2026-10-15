@@ -1,0 +1,166 @@
+@import "../abstracts/breakpoints";
+
+// ===============================
+// POSITION UTILITIES
+// ===============================
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  position: sticky;
+}
+
+// ===============================
+// POSITION OFFSET UTILITIES
+// ===============================
+
+@for $i from 0 through 50 {
+  .top-#{$i} {
+    top: $i * $scale-tight;
+  }
+
+  .bottom-#{$i} {
+    bottom: $i * $scale-tight;
+  }
+
+  .left-#{$i} {
+    left: $i * $scale-tight;
+  }
+
+  .right-#{$i} {
+    right: $i * $scale-tight;
+  }
+
+  .-top-#{$i} {
+    top:-$i * $scale-base;
+  }
+
+  .-bottom-#{$i} {
+    bottom: -$i * $scale-base;
+  }
+
+  .-left-#{$i} {
+    left: -$i * $scale-base;
+  }
+
+  .-right-#{$i} {
+    right: -$i * $scale-base;
+  }
+}
+
+// ===============================
+// CENTERING UTILITIES
+// ===============================
+
+.ab-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ab-x-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ab-y-center {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// ===============================
+// RESPONSIVE POSITIONING
+// ===============================
+
+@each $name, $size in $breakpoints {
+  @media (max-width: $size) {
+    // POSITION SWITCH
+    .#{$name}-relative {
+      position: relative;
+    }
+
+    .#{$name}-absolute {
+      position: absolute;
+    }
+
+    .#{$name}-fixed {
+      position: fixed;
+    }
+
+    .#{$name}-sticky {
+      position: sticky;
+    }
+
+    // RESET POSITIONING (useful for mobile layouts)
+    .#{$name}-position-unset {
+      position: static;
+    }
+
+    // CENTERING
+    .#{$name}-center {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .#{$name}-x-center {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .#{$name}-y-center {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    // SIMPLE POSITION OVERRIDES
+    .#{$name}-top-left {
+      top: 6%;
+      left: 5%;
+    }
+
+    .#{$name}-left {
+      left: 5%;
+    }
+
+    .#{$name}-right {
+      right: 5%;
+    }
+
+    .#{$name}-top {
+      top: 5%;
+    }
+
+    .#{$name}-bottom {
+      bottom: 5%;
+    }
+
+    @for $i from 0 through 40 {
+      .#{$name}-top-#{$i} {
+        top: $i * $scale-tight;
+      }
+    
+      .#{$name}-bottom-#{$i} {
+        bottom: $i * $scale-tight;
+      }
+    
+      .#{$name}-left-#{$i} {
+        left: $i * $scale-tight;
+      }
+    
+      .#{$name}-right-#{$i} {
+        right: $i * $scale-tight;
+      }
+    }
+  }
+}

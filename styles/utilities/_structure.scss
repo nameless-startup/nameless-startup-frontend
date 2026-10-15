@@ -1,0 +1,337 @@
+@import "../abstracts/breakpoints";
+
+// ===============================
+// DISPLAY UTILITIES
+// ===============================
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.grid {
+  display: grid;
+}
+
+// ===============================
+// FLEX DIRECTION
+// ===============================
+
+.row {
+  flex-direction: row;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.column-reverse {
+  flex-direction: column-reverse;
+}
+
+.remove {
+  display: none;
+}
+
+// ===============================
+// JUSTIFY CONTENT
+// ===============================
+
+.justify-content-start {
+  justify-content: flex-start;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.justify-content-evenly {
+  justify-content: space-evenly;
+}
+
+// ===============================
+// ALIGN ITEMS
+// ===============================
+
+.align-items-start {
+  align-items: flex-start;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.align-items-stretch {
+  align-items: stretch;
+}
+
+// ===============================
+// GRID COLUMNS
+// ===============================
+
+@for $i from 1 through 12 {
+  .grid-col-#{$i} {
+    grid-template-columns: repeat($i, 1fr);
+  }
+}
+
+// ===============================
+// GRID ROWS
+// ===============================
+
+@for $i from 1 through 12 {
+  .grid-row-#{$i} {
+    grid-template-rows: repeat($i, 1fr);
+  }
+}
+
+// ===============================
+// GRID HELPERS
+// ===============================
+
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+// ===============================
+// ASPECT RATIO
+// ===============================
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-3-2 {
+  aspect-ratio: 3 / 2;
+}
+
+// ===============================
+// Z-INDEX
+// ===============================
+
+.index-1 {
+  z-index: 1;
+}
+
+.index-10 {
+  z-index: 10;
+}
+
+.index-100 {
+  z-index: 100;
+}
+
+.index-1000 {
+  z-index: 1000;
+}
+
+.index-1500 {
+  z-index: 1500;
+}
+
+.index-2000 {
+  z-index: 2000;
+}
+
+// ===============================
+// RESPONSIVE UTILITIES
+// ===============================
+
+@each $name, $size in $breakpoints {
+
+  @media (max-width: $size) {
+
+    // ===============================
+    // DISPLAY
+    // ===============================
+
+    .#{$name}-remove {
+      display: none !important;
+    }
+
+    .#{$name}-block {
+      display: block;
+    }
+
+    .#{$name}-flex {
+      display: flex;
+    }
+
+    .#{$name}-inline-flex {
+      display: inline-flex;
+    }
+
+    .#{$name}-grid {
+      display: grid;
+    }
+
+    // ===============================
+    // FLEX DIRECTION
+    // ===============================
+
+    .#{$name}-row {
+      flex-direction: row;
+    }
+
+    .#{$name}-row-reverse {
+      flex-direction: row-reverse;
+    }
+
+    .#{$name}-column {
+      flex-direction: column;
+    }
+
+    .#{$name}-column-reverse {
+      flex-direction: column-reverse;
+    }
+
+    // ===============================
+    // JUSTIFY CONTENT
+    // ===============================
+
+    .#{$name}-justify-content-start {
+      justify-content: flex-start;
+    }
+
+    .#{$name}-justify-content-center {
+      justify-content: center;
+    }
+
+    .#{$name}-justify-content-end {
+      justify-content: flex-end;
+    }
+
+    .#{$name}-justify-content-between {
+      justify-content: space-between;
+    }
+
+    .#{$name}-justify-content-around {
+      justify-content: space-around;
+    }
+
+    .#{$name}-justify-content-evenly {
+      justify-content: space-evenly;
+    }
+
+    // ===============================
+    // ALIGN ITEMS
+    // ===============================
+
+    .#{$name}-align-items-start {
+      align-items: flex-start;
+    }
+
+    .#{$name}-align-items-center {
+      align-items: center;
+    }
+
+    .#{$name}-align-items-end {
+      align-items: flex-end;
+    }
+
+    .#{$name}-align-items-stretch {
+      align-items: stretch;
+    }
+
+    // ===============================
+    // GRID COLUMNS
+    // ===============================
+
+    @for $i from 1 through 12 {
+
+      .#{$name}-grid-col-#{$i} {
+        grid-template-columns: repeat($i, 1fr);
+      }
+    }
+
+    // ===============================
+    // GRID ROWS
+    // ===============================
+
+    @for $i from 1 through 12 {
+
+      .#{$name}-grid-row-#{$i} {
+        grid-template-rows: repeat($i, 1fr);
+      }
+    }
+
+    // ===============================
+    // TEXT ALIGNMENT
+    // ===============================
+
+    .#{$name}-text-left {
+      text-align: left;
+    }
+
+    .#{$name}-text-center {
+      text-align: center;
+    }
+
+    .#{$name}-text-right {
+      text-align: right;
+    }
+
+    // ===============================
+    // POSITION
+    // ===============================
+
+    .#{$name}-relative {
+      position: relative;
+    }
+
+    .#{$name}-absolute {
+      position: absolute;
+    }
+
+    .#{$name}-fixed {
+      position: fixed;
+    }
+
+    .#{$name}-sticky {
+      position: sticky;
+    }
+    // ===============================
+    // POSITION
+    // ===============================
+    @for $i from 1 through 10 {
+    .#{$name}-order-#{$i} {
+    order: $i;
+   }
+  }
+  }
+}

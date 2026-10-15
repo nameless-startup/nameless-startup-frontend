@@ -1,0 +1,43 @@
+.categories {
+  position: relative;
+}
+
+#mega-menu {
+  display: none;
+  overflow: hidden;
+  position: absolute;
+  border-radius: 10px;
+  top: 89px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 60px);
+  max-width: 1440px;
+  height: fit-content;
+  box-shadow: 0px 6px 20px 2px var(--shadow-sm);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+
+  #mega-menu-banner {
+    width: 80%;
+
+    img {
+      max-width: 320px;
+    }
+  }
+}
+
+// Show the mega menu when its trigger button is focused.
+// Scoped to `body:has(...)` instead of `.categories:has(...)` so it works on
+// every page: the button and menu live in the header on sub-pages, but inside
+// `.categories` on the home page. Both are always descendants of <body>.
+body:has(#categories-button:focus-within) #mega-menu {
+  display: flex;
+}
+
+// Open the mega menu on hover of the header trigger ("همه دسته‌بندی‌ها") and
+// keep it open while the pointer is over the menu itself so the user can move
+// from the trigger down into the panel without it closing.
+body:has(.nav-categories:hover) #mega-menu,
+body:has(#mega-menu:hover) #mega-menu {
+  display: flex;
+}
