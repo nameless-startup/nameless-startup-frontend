@@ -1,0 +1,197 @@
+// ===============================
+// GOLDEN CAMPAIGN COUNTDOWN
+// ===============================
+// UI-only redesign (no JS): one cohesive countdown component —
+// dark glass card with gold digit tiles floating over the banner
+// on desktop, compact chip strip below the banner on mobile.
+
+$gold: #fbaf41; // same value as .text-gold
+$gold-deep: #f5a724; // same value as .bg-gold
+
+.golden-campaign {
+  // ---------- Countdown card (banner overlay) ----------
+  .golden-timer {
+    position: absolute;
+    right: auto;
+    bottom: 1.75rem;
+    left: 1.75rem;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    min-width: 16rem;
+    padding: 0.875rem 0.875rem 1rem;
+
+    border: 1px solid rgba(251, 175, 65, 0.35);
+    border-radius: 1rem;
+    background: linear-gradient(
+      165deg,
+      rgba(30, 37, 48, 0.97),
+      rgba(16, 19, 25, 0.94)
+    );
+    box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.7);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    // golden accent line along the top edge
+    &::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      top: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        $gold,
+        $gold-deep,
+        transparent
+      );
+    }
+  }
+
+  .golden-timer-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--color-primary);
+    }
+  }
+
+  .golden-timer-track {
+    display: flex;
+    align-items: stretch;
+    gap: 0.375rem;
+  }
+
+  .golden-timer-unit {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+
+    min-width: 3.25rem;
+    padding: 0.5rem 0.375rem 0.375rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .golden-timer-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .golden-timer-label {
+    font-size: 0.6875rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .golden-timer-sep {
+    align-self: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+  }
+
+  // Tablet: card flows below the banner instead of floating over it
+  @media (max-width: 1024px) {
+    .golden-timer {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      left: auto;
+
+      width: auto;
+      margin: 0.75rem;
+      border-radius: 0.75rem;
+    }
+  }
+
+  // ---------- Compact strip (mobile / tablet portrait) ----------
+  .golden-mobile {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .golden-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+
+    color: var(--color-text-inverse);
+    font-size: 1rem;
+    font-weight: 600;
+
+    .icon {
+      width: 1.125rem;
+      height: 1.125rem;
+      color: $gold;
+    }
+  }
+
+  .golden-mobile-track {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+
+    // hug the inline end even if the row wraps on narrow screens
+    margin-inline-start: auto;
+  }
+
+  .golden-mini-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+
+    min-width: 2.75rem;
+    padding: 0.25rem 0.375rem;
+
+    border-radius: 0.625rem;
+    background: var(--color-background);
+    box-shadow: 0 4px 10px -6px var(--shadow-md);
+  }
+
+  .golden-mini-value {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .golden-mini-label {
+    font-size: 0.625rem;
+    line-height: 1;
+    color: var(--color-text-muted);
+  }
+
+  .golden-mobile-sep {
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-text-inverse);
+    opacity: 0.7;
+  }
+}

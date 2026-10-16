@@ -37,6 +37,11 @@ window.addEventListener("load", () => {
 // =========================
 let resumeTimeout = null;
 
+// Respect users who prefer reduced motion: no autoplay marquee
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
 const avatarSwiper = new Swiper(".avatar-swiper", {
   observer: true,
   observeParents: true,
@@ -46,17 +51,6 @@ const avatarSwiper = new Swiper(".avatar-swiper", {
   loop: true,
   speed: 4500,
   slidesPerView: "auto",
-
-  autoplay: {
-    delay: 0,
-    disableOnInteraction: false,
-    pauseOnMouseEnter: true,
-  },
-
-  navigation: {
-    nextEl: ".avatar-shell .swiper-button-next",
-    prevEl: ".avatar-shell .swiper-button-prev",
-  },
 
   breakpoints: {
     0: {
@@ -79,6 +73,14 @@ const avatarSwiper = new Swiper(".avatar-swiper", {
     },
   },
 
+  autoplay: prefersReducedMotion
+    ? false
+    : {
+        delay: 0,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+
   // ─── Auto‑resume after 2s ───
   on: {
     // Cancel pending resume when user starts interacting
@@ -90,7 +92,7 @@ const avatarSwiper = new Swiper(".avatar-swiper", {
     touchEnd: function () {
       clearTimeout(resumeTimeout);
       resumeTimeout = setTimeout(() => {
-        this.autoplay.start();
+        this.autoplay?.start();
       }, 2000);
     },
 
@@ -98,7 +100,7 @@ const avatarSwiper = new Swiper(".avatar-swiper", {
     click: function () {
       clearTimeout(resumeTimeout);
       resumeTimeout = setTimeout(() => {
-        this.autoplay.start();
+        this.autoplay?.start();
       }, 2000);
     },
   },
