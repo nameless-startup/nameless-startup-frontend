@@ -1,0 +1,53 @@
+name: Deploy to FTP Hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+
+env:
+  NODE_VERSION: "20"
+  FTP_HOST: ${{ secrets.FTP_HOST }}
+  FTP_USER: ${{ secrets.FTP_USER }}
+  FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+  FTP_TARGET: ${{ secrets.FTP_TARGET || "/home/tolidk.../miladvaghef" }}
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build Next.js app (static export)
+        run: npm run build
+
+      - name: Verify static output
+        run: |
+          if [ ! -d "out" ] || [ -z "$(ls -A out)" ]; then
+            echo "❌ Build failed: 'out' directory is empty or missing"
+            exit 1
+          fi
+          echo "✅ Build successful. Output files:"
+          ls -la out/
+
+      - name: Deploy to FTP hosting
+        uses: appleboy/ftp-action@v2.1.0
+        with:
+          host: ${{ env.FTP_HOST }}
+          user: ${{ env.FTP_USER }}
+          password: ${{ env.FTP_PASSWORD }}
+          local: out/
+          remote: ${{ env.FTP_TARGET }}
+          delete: false # Set to true to clear remote dir before upload
