@@ -4,10 +4,15 @@ let authToken: string | null = null;
 
 export function setAuthToken(token: string | null) {
   authToken = token;
+  if (typeof window !== "undefined") {
+    if (token) sessionStorage.setItem("gilaneh-session", token);
+    else sessionStorage.removeItem("gilaneh-session");
+    window.dispatchEvent(new Event("gilaneh-auth-change"));
+  }
 }
 
 export function getAuthToken(): string | null {
-  return authToken;
+  return authToken ?? (typeof window !== "undefined" ? sessionStorage.getItem("gilaneh-session") : null);
 }
 
 async function request<T>(

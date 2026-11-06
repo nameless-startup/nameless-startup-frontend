@@ -6,7 +6,7 @@ export const shops: Shop[] = [
     name: "بسته همکاری دست‌اسناد گیلان",
     description:
       "دست‌اسناد سنتی گیلان شامل دوزی رشتی، سفال کاری و خردهای چوبی ساخته شده توسط هنرمندان محلی.",
-    image: "https://picsum.photos/seed/gilan-shop-1/800/440",
+    image: "/images/shops-1.jpg",
     category: "دست‌اسناد",
     location: "بازار رشت",
   },
@@ -15,7 +15,7 @@ export const shops: Shop[] = [
     name: "فروشگاه یادگاری ماسوله",
     description:
       "یادگارهای دست‌ساز، شیرینی‌های محلی و لباس‌های سنتی از روستای تاریخی ماسوله.",
-    image: "https://picsum.photos/seed/gilan-shop-2/800/440",
+    image: "/images/shops-2.jpg",
     category: "یادگاری",
     location: "روستای ماسوله",
   },
@@ -24,7 +24,7 @@ export const shops: Shop[] = [
     name: "بازار مصلح انزلی",
     description:
       "مصلح تازه دریای خزر، مثلایل و محصولات دریایی مستقیماً از مصلح‌کاران محلی.",
-    image: "https://picsum.photos/seed/gilan-shop-3/800/440",
+    image: "/images/shops-3.jpg",
     category: "مقدری",
     location: "بندر انزلی",
   },
@@ -33,7 +33,7 @@ export const shops: Shop[] = [
     name: "خانه چای لاهیجان",
     description:
       "چای پیشنهادی گیلان، ادویه محلی و مجموعه‌های سنتی چای از مزارع چای مشهور منطقه.",
-    image: "https://picsum.photos/seed/gilan-shop-4/800/440",
+    image: "/images/shops-4.jpg",
     category: "چای",
     location: "لاهیجان",
   },

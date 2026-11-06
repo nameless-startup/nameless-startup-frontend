@@ -5,49 +5,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Check, ChevronLeft, Heart, Minus, Plus, Share2, ShoppingBag, Sparkles } from "lucide-react";
 import type { Product } from "@/data/gilan";
+import {catalogOptions,commerceService,formatPrice} from "@/services/commerce.service";
+import {useCatalog} from "@/hooks/useCatalog";
+import {useCart} from "@/hooks/useCommerce";
+import "@/components/commerce/commerce.css";
 import Footer from "@/components/sections/footer";
 
 const number = new Intl.NumberFormat("fa-IR");
-const price = (value: number) => `${number.format(value)} دلار`;
-function subscribeToFavorites(notify: () => void) {
-  window.addEventListener("storage", notify);
-  window.addEventListener("gilaneh-favorites", notify);
-  return () => {
-    window.removeEventListener("storage", notify);
-    window.removeEventListener("gilaneh-favorites", notify);
-  };
-}
-
-export default function ProductDetail({ product, related }: { product: Product; related: Product[] }) {
+const price = formatPrice;
+export default function ProductDetail({ product: initialProduct, related: initialRelated }: { product: Product; related: Product[] }) {
+  const catalog=useCatalog();
+  const product=catalog.find(item=>item.id===initialProduct.id)!;
+  const related=catalog.filter(item=>item.active&&initialRelated.some(other=>other.id===item.id));
   const [quantity, setQuantity] = useState(1);
-  const saved = useSyncExternalStore(subscribeToFavorites, () => {
-    try { return localStorage.getItem(`favorite-product-${product.id}`) === "true"; } catch { return false; }
-  }, () => false);
+  const saved = useSyncExternalStore(commerceService.subscribe,()=>commerceService.favoriteSnapshot(product.id),()=>false);
+  const options=catalogOptions[product.id];
+  const [variant,setVariant]=useState(options.variants[0].id);
+  const selected=options.variants.find(v=>v.id===variant)!;
+  const stock=product.stock[variant]??selected.stock;
+  const unitPrice=product.price+selected.extra;
+  const {count}=useCart();
   const [message, setMessage] = useState("");
   const [tab, setTab] = useState<"description" | "details">("description");
 
   function toggleFavorite() {
-    try {
-      localStorage.setItem(`favorite-product-${product.id}`, String(!saved));
-      window.dispatchEvent(new Event("gilaneh-favorites"));
-      setMessage(saved ? "محصول از علاقه‌مندی‌ها حذف شد." : "محصول در علاقه‌مندی‌های این مرورگر ذخیره شد.");
-    } catch { setMessage("ذخیره در این مرورگر امکان‌پذیر نیست."); }
+    try { commerceService.toggleFavorite(product.id);setMessage(saved?"محصول از نشان‌شده‌ها حذف شد.":"محصول نشان شد."); } catch {setMessage("ذخیره‌سازی در دسترس نیست.");}
   }
-
   function addToCart() {
-    try {
-      const raw: unknown = JSON.parse(localStorage.getItem("gilaneh-cart") || "[]");
-      const cart: { id: string; quantity: number }[] = Array.isArray(raw)
-        ? raw.filter((item): item is { id: string; quantity: number } => !!item && typeof item.id === "string" && Number.isInteger(item.quantity) && item.quantity > 0)
-        : [];
-      const item = cart.find((entry) => entry.id === product.id);
-      if (item) item.quantity += quantity;
-      else cart.push({ id: product.id, quantity });
-      localStorage.setItem("gilaneh-cart", JSON.stringify(cart));
-      setMessage(`${number.format(quantity)} عدد به سبد محلی اضافه شد. پرداخت آنلاین هنوز فعال نیست.`);
-    } catch { setMessage("ذخیره سبد در این مرورگر امکان‌پذیر نیست."); }
+    try {commerceService.add(product.id,variant,quantity);setMessage(number.format(quantity)+" عدد به سبد اضافه شد.");}catch(error){setMessage(error instanceof Error?error.message:"افزودن به سبد انجام نشد.");}
   }
-
   async function share() {
     try {
       if (navigator.share) await navigator.share({ title: product.name, url: window.location.href });
@@ -82,23 +68,24 @@ export default function ProductDetail({ product, related }: { product: Product; 
             <p className="mt-5 text-base leading-8 text-slate-400">{product.description}</p>
             <div className="my-8 flex items-center justify-between border-y border-white/10 py-6">
               <span className="text-sm text-slate-400">قیمت هر عدد</span>
-              <span className="text-3xl font-bold text-violet-300">{price(product.price)}</span>
+              <span className="text-3xl font-bold text-violet-300">{price(unitPrice)}</span>
             </div>
+            <fieldset className="shop-product-options"><legend>{options.label}</legend><div>{options.variants.map(option=><button type="button" key={option.id} aria-pressed={variant===option.id} onClick={()=>{setVariant(option.id);setQuantity(1);setMessage("");}}>{option.label}</button>)}</div><p><Check size={14}/> {product.active&&stock>0?"موجود در انبار":"فعلاً ناموجود"} · {stock.toLocaleString("fa-IR")} عدد</p></fieldset>
             <div className="mb-5 flex items-center justify-between">
               <label className="text-sm text-slate-300" htmlFor="product-quantity">تعداد</label>
               <div className="flex items-center gap-4 rounded-full border border-white/15 bg-white/5 p-1.5">
-                <button aria-label="افزایش تعداد" disabled={quantity >= 99} onClick={() => setQuantity(quantity + 1)} className="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"><Plus size={16} /></button>
+                <button aria-label="افزایش تعداد" disabled={quantity >= stock} onClick={() => setQuantity(quantity + 1)} className="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"><Plus size={16} /></button>
                 <output id="product-quantity" className="min-w-6 text-center" aria-live="polite">{number.format(quantity)}</output>
                 <button aria-label="کاهش تعداد" disabled={quantity === 1} onClick={() => setQuantity(quantity - 1)} className="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"><Minus size={16} /></button>
               </div>
             </div>
-            <div className="flex items-center justify-between pb-5 text-sm"><span className="text-slate-400">جمع مبلغ</span><strong>{price(product.price * quantity)}</strong></div>
+            <div className="flex items-center justify-between pb-5 text-sm"><span className="text-slate-400">جمع مبلغ</span><strong>{price(unitPrice * quantity)}</strong></div>
             <div className="flex gap-3">
-              <button onClick={addToCart} className="flex min-h-14 flex-1 items-center justify-center gap-3 rounded-full bg-violet-600 px-4 font-medium transition hover:bg-violet-500"><ShoppingBag size={19} /> افزودن به سبد خرید</button>
+              <button disabled={!product.active||stock===0||quantity>stock} onClick={addToCart} className="flex min-h-14 flex-1 items-center justify-center gap-3 rounded-full bg-violet-600 px-4 font-medium transition hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed"><ShoppingBag size={19} /> افزودن به سبد خرید</button>
               <button onClick={share} aria-label="اشتراک‌گذاری محصول" className="rounded-full border border-white/15 p-4 hover:bg-white/10"><Share2 size={20} /></button>
             </div>
             <p role="status" className="mt-3 min-h-12 text-sm leading-6 text-violet-300">{message}</p>
-            <p className="flex items-center gap-2 text-xs text-slate-500"><Check size={15} /> سبد و علاقه‌مندی‌ها در همین مرورگر ذخیره می‌شوند.</p>
+            <Link href="/cart" className="shop-product-cart">دیدن سبد خرید ({count.toLocaleString("fa-IR")}) <ArrowLeft size={16}/></Link><p className="shop-local-note">ارسال رایگان برای سفارش‌های بالای ۱۰۰ دلار · خرید آزمایشی</p>
           </div>
         </div>
 
@@ -107,7 +94,7 @@ export default function ProductDetail({ product, related }: { product: Product; 
             {([ ["description", "درباره محصول"], ["details", "مشخصات"] ] as const).map(([key, label]) => <button key={key} id={`tab-${key}`} role="tab" aria-selected={tab === key} aria-controls={`panel-${key}`} onClick={() => setTab(key)} className={`border-b-2 pb-4 text-sm transition ${tab === key ? "border-violet-400 text-violet-300" : "border-transparent text-slate-400 hover:text-white"}`}>{label}</button>)}
           </div>
           <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`}>
-            {tab === "description" ? <><h2 className="mb-3 text-xl font-bold">{product.name}</h2><p className="max-w-3xl leading-8 text-slate-400">{product.description}</p><p className="mt-4 text-sm leading-7 text-slate-500">این محصول بخشی از مجموعه محصولات گیلانه است. اطلاعات تکمیلی درباره تولیدکننده، موجودی و شرایط ارسال به‌زودی اضافه می‌شود.</p></> : <dl className="grid gap-4 sm:grid-cols-2">{[["کد محصول", `GL-${product.id.padStart(4, "0")}`], ["دسته‌بندی", product.category], ["نام محصول", product.name], ["قیمت واحد", price(product.price)]].map(([label, value]) => <div key={label} className="flex justify-between gap-4 rounded-xl bg-white/5 p-4 text-sm"><dt className="text-slate-400">{label}</dt><dd>{value}</dd></div>)}</dl>}
+            {tab === "description" ? <><h2 className="mb-3 text-xl font-bold">{product.name}</h2><p className="max-w-3xl leading-8 text-slate-400">{product.description}</p><p className="mt-4 text-sm leading-7 text-slate-500">محصول منتخب از تولیدکنندگان محلی. گزینه‌ی دلخواهت را انتخاب کن و به سبد اضافه کن. ثبت سفارش و پرداخت در این نسخه به‌صورت آزمایشی انجام می‌شود.</p></> : <dl className="grid gap-4 sm:grid-cols-2">{[["کد محصول", `GL-${product.id.padStart(4, "0")}`], ["دسته‌بندی", product.category], ["نام محصول", product.name], ["قیمت واحد", price(product.price)]].map(([label, value]) => <div key={label} className="flex justify-between gap-4 rounded-xl bg-white/5 p-4 text-sm"><dt className="text-slate-400">{label}</dt><dd>{value}</dd></div>)}</dl>}
           </div>
         </section>
 

@@ -1,0 +1,24 @@
+const {test,beforeEach}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const ts=require('typescript');
+require.extensions['.ts']=(module,filename)=>module._compile(ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,filename);
+const {commerceService:service,normalizeCart,resolveLine}=require('../src/services/commerce.service.ts');
+const {panelService}=require('../src/services/panel.service.ts');
+const values=new Map();
+global.window=new EventTarget();
+global.localStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,String(value)),removeItem:key=>values.delete(key)};
+const phone='+989123456789';
+const address={recipient:'Test Buyer',phone:'09123456789',city:'Rasht',address:'Test street, building 12',postalCode:'1234567890'};
+beforeEach(()=>values.clear());
+test('legacy cart migration rejects bad IDs and quantities and caps stock',()=>{assert.deepEqual(normalizeCart([{id:'1',quantity:2},{id:'1',quantity:2},{id:'unknown',quantity:1},{id:'2',quantity:-2},{id:'2',variant:'bogus',quantity:2}]),[{id:'1',variant:'natural',quantity:4}]);assert.equal(normalizeCart([{id:'1',quantity:100}])[0].quantity,8);});
+test('variant-aware additions, limits and removal',()=>{service.add('1','natural',2);service.add('1','violet',1);assert.equal(service.cart().length,2);assert.throws(()=>service.add('1','violet',4));service.setQuantity('1','natural',4);assert.equal(service.cart()[0].quantity,4);service.remove('1','violet');assert.equal(service.cart().length,1);});
+test('totals use variant prices, discount, and free-shipping threshold',()=>{const items=[resolveLine({id:'2',variant:'500g',quantity:2})];assert.deepEqual(service.totals(items,'GILAN10'),{subtotal:64,shipping:5,discount:6.4,total:62.6});assert.equal(service.totals([resolveLine({id:'1',variant:'natural',quantity:3})]).shipping,0);});
+test('demo initialization is idempotent and respects edited profile and removed saves',()=>{panelService.initialize(phone);assert.equal(service.account(phone).orders.length,3);panelService.update(phone,{name:'Custom',saved:[],trips:[]});panelService.initialize(phone);assert.equal(service.account(phone).orders.length,3);assert.equal(panelService.parse(panelService.snapshot(phone)).name,'Custom');assert.deepEqual(panelService.parse(panelService.snapshot(phone)).saved,[]);assert.equal(service.account('+989111111111').orders.length,0);});
+test('checkout validates before committing and consumes cart exactly once',()=>{service.add('2','500g',2);assert.throws(()=>service.checkout(phone,{...address,postalCode:'x'},''));assert.equal(service.cart().length,1);const order=service.checkout(phone,address,'GILAN10');assert.equal(order.total,62.6);assert.equal(service.cart().length,0);assert.equal(service.account(phone).orders[0].id,order.id);assert.deepEqual(service.account(phone).lastAddress,address);assert.throws(()=>service.checkout(phone,address,''));});
+test('failed account write restores basket',()=>{service.add('1','natural',1);const real=localStorage.setItem;localStorage.setItem=(key,value)=>{if(key.startsWith('gilaneh-orders'))throw Error('quota');real(key,value);};try{assert.throws(()=>service.checkout(phone,address,''));assert.equal(service.cart()[0].quantity,1);}finally{localStorage.setItem=real;}});
+test('cancel is scoped and only processing orders can be cancelled',()=>{service.seed(phone);assert.throws(()=>service.cancel(phone,'GL-DEMO-1001'));assert.throws(()=>service.cancel('+989111111111','GL-DEMO-1003'));service.cancel(phone,'GL-DEMO-1003');assert.equal(service.account(phone).orders[0].status,'cancelled');assert.throws(()=>service.cancel(phone,'GL-DEMO-1003'));});
+test('buy again adds real catalog lines and favorite changes notify subscribers',()=>{service.seed(phone);service.reorder(phone,'GL-DEMO-1001');assert.equal(service.cart()[0].id,'1');let count=0;const unsubscribe=service.subscribe(()=>count++);service.toggleFavorite('2');assert.equal(service.favoriteSnapshot('2'),true);assert.equal(count,1);unsubscribe();});
+
+test('first checkout is preserved when demo orders are initialized later',()=>{service.add('2','250g',1);const order=service.checkout(phone,address,'');service.seed(phone);assert.equal(service.account(phone).orders.length,4);assert.equal(service.account(phone).orders[0].id,order.id);service.seed(phone);assert.equal(service.account(phone).orders.length,4);});
+test('coupon persists and rejects unsupported values',()=>{service.setCoupon('GILAN10');assert.equal(JSON.parse(service.couponSnapshot()),'GILAN10');assert.throws(()=>service.setCoupon('INVALID'));assert.equal(JSON.parse(service.couponSnapshot()),'GILAN10');service.setCoupon('');assert.equal(JSON.parse(service.couponSnapshot()),'');});

@@ -2,49 +2,48 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import heroImage from "../../../dark-jungle-with-sky-stars.jpg";
+import { ArrowDown, ArrowLeft, Compass, MapPin, MoveUpLeft, Store, BookOpen, Sparkles } from "lucide-react";
 
-const Hero = () => {
+const experiences = [
+  { number: "۰۱", label: "جایی برای کشف کردن", detail: "از جنگل تا دریا", href: "#places", icon: Compass },
+  { number: "۰۲", label: "تکه‌ای از زندگی محلی", detail: "بازارها و دست‌ساخته‌ها", href: "#shops", icon: Store },
+  { number: "۰۳", label: "داستانی برای خواندن", detail: "گیلان از نگاه نزدیک", href: "#blogs", icon: BookOpen },
+];
+
+export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden ambient-glow">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/90 to-black/85"></div>
-        <Image
-          src={heroImage}
-          alt="Dark jungle with sky stars"
-          className="w-full h-full object-cover opacity-80"
-          style={{ filter: "brightness(0.5)" }}
-          fill
-          sizes="100vw"
-          priority
-        />
+    <section className="travel-hero" aria-labelledby="hero-title">
+      <div className="hero-orbit" aria-hidden="true" />
+      <div className="hero-layout">
+        <div className="hero-copy">
+          <div className="hero-eyebrow"><span /> به هوای یک حال خوب <span className="eyebrow-line" /></div>
+          <h1 id="hero-title">بعضی سفرها،<br />از <span className="hero-heart">دل<span className="heart-underline" aria-hidden="true" /></span> شروع می‌شن.</h1>
+          <p className="hero-description">میان عطر چای و مه جنگل، گیلان منتظر توست.<br className="hidden sm:block" /> جاهای تازه کشف کن، با زندگی محلی همراه شو و<br className="hidden xl:block" /> قصه‌ی سفر خودت رو بساز.</p>
+          <div className="hero-actions">
+            <Link href="#places" className="hero-primary">بزن بریم گیلان <ArrowLeft size={20} /></Link>
+            <Link href="#blogs" className="hero-secondary">از گیلان بخوان <MoveUpLeft size={18} /></Link>
+          </div>
+          <div className="hero-note"><span className="note-icon"><MapPin size={16} /></span><span>مقصد، گیلان است؛ مسیرش را تو انتخاب کن.</span></div>
+        </div>
+        <div className="hero-visual">
+          <div className="hero-photo">
+            <Image src="/images/places-3.jpg" alt="دره‌های سبز و کوه‌های مه‌آلود در نور غروب" fill sizes="(max-width: 767px) 100vw, 50vw" preload className="hero-landscape" />
+            <div className="photo-shade" />
+            <span className="photo-topline"><span className="photo-dot" /> کمی دورتر از روزمرگی</span>
+            <div className="photo-caption"><span>نفس بکش. اینجا زندگی آرام‌تر است.</span><strong>به سمت سبزِ بی‌انتها</strong></div>
+            <Link href="#places" className="photo-explore" aria-label="کشف مکان‌های دیدنی"><MoveUpLeft size={24} /></Link>
+          </div>
+          <div className="hero-postcard"><Sparkles size={22} /><div><strong>یک سفر، هزار کشف تازه</strong><span>برای لحظه‌هایی که می‌مانند</span></div></div>
+          <span className="photo-coordinate" dir="ltr">GILAN, IRAN / 37° N · 49° E</span>
+        </div>
       </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in-up">
-          [ کشف گیلان ]
-        </div>
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-balance mb-8 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
-          به <span className="text-violet-400">گیلان</span>، شهر خاطرات خوب<br />
-          <span className="block mt-4 text-[16px] sm:text-[40px] md:text-[56px] lg:text-[64px] font-medium text-violet-400 leading-relaxed">خوش آمدید</span>
-        </h1>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: "300ms" }}>
-          <Link
-            href="#places"
-            className="px-8 py-3 rounded-full bg-violet-600 text-white font-medium hover:bg-violet-500 hover:shadow-[0_0_30px_rgba(124,58,237,0.5)] transition-all duration-300 active:scale-95 text-base"
-          >
-            کشف مکان‌ها
-          </Link>
-          <Link
-            href="#shops"
-            className="px-8 py-3 rounded-full bg-white/10 text-white font-medium hover:bg-white/20 hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] transition-all duration-300 active:scale-95 text-base border border-white/10"
-          >
-            فروشگاه‌های محلی
-          </Link>
-        </div>
+      <div className="hero-bottom">
+        <a href="#about" className="hero-scroll"><span><ArrowDown size={18} /></span>کمی پایین‌تر، کمی نزدیک‌تر</a>
+        <span className="hero-edition" dir="ltr">THE OTHER SIDE OF EVERYDAY</span>
+      </div>
+      <div className="experience-strip">
+        {experiences.map(({number, label, detail, href, icon: Icon}) => <Link key={number} href={href} className="experience-link"><span className="experience-number">{number}</span><Icon size={23} strokeWidth={1.5} /><div><strong>{label}</strong><span>{detail}</span></div><MoveUpLeft size={19} className="experience-arrow" /></Link>)}
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

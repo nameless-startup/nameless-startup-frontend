@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className="scroll-smooth">
       <body className={`${Peyda.className} font-sans antialiased min-h-screen bg-background text-foreground`}>
         <Navbar />
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
       </body>
     </html>
   );

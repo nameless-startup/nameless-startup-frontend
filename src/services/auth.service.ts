@@ -1,3 +1,5 @@
+import {ADMIN_TOKEN,ADMIN_USER,verifyAdminCredentials,normalizePhone,sessionUser} from "./role-policy";
+import {accountService} from "./account.service";
 import { setAuthToken } from "@/lib/api";
 import {
   AuthResponse,
@@ -12,18 +14,26 @@ import {
 
 const MOCK_USER: User = {
   id: "1",
-  name: "مدیر سیستم",
+  name: "هم‌سفر گیلانه",
   phone: "+989123456789",
-  role: "admin",
+  role: "user",
   avatar:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+    "/images/avatar.jpg",
 };
 
 const MOCK_TOKEN = "mock_token_12345";
 
+function rememberUser(user: User) {
+  accountService.remember(user);
+  sessionStorage.setItem("gilaneh-mock-user", JSON.stringify(user));
+  return user;
+}
+
 // In-memory OTP store (mock backend). In production, this lives on the server.
 let currentOtpCode: string | null = null;
 let currentOtpPhone: string | null = null;
+let otpExpiresAt=0;
+let verifiedPhone:string|null=null;
 
 // Helper: generate a random 6-digit code
 function generateOtp(): string {
@@ -31,42 +41,43 @@ function generateOtp(): string {
 }
 
 export const authService = {
-  login: async (dto: LoginDto): Promise<AuthResponse> => {
-    // Mock: always succeeds
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setAuthToken(MOCK_TOKEN);
-        resolve({
-          user: MOCK_USER,
-          token: MOCK_TOKEN,
-        });
-      }, 600);
-    });
+  validateCredentials: async (dto: LoginDto, action:'login'|'register'='login'):Promise<void> => {
+    const phone=normalizePhone(dto.phone);
+    if(phone===ADMIN_USER.phone){
+      if(action==='register')throw Error("این شماره حساب مدیریت است؛ از صفحه ورود استفاده کنید.");
+      if(!verifyAdminCredentials(phone,dto.password))throw Error("شماره موبایل یا رمز عبور درست نیست.");
+    }else accountService.assertActive(phone);
   },
-
+  login: async (dto: LoginDto): Promise<AuthResponse> => {
+    const phone=normalizePhone(dto.phone);
+    await authService.validateCredentials({...dto,phone});
+    if(phone===ADMIN_USER.phone){
+      if(verifiedPhone!==phone||Date.now()>otpExpiresAt)throw Error("ابتدا کد تأیید شماره موبایل را وارد کنید.");
+      verifiedPhone=null;currentOtpCode=null;
+      const user=rememberUser({...ADMIN_USER});setAuthToken(ADMIN_TOKEN);return {user,token:ADMIN_TOKEN};
+    }
+    const existing=accountService.list().find(user=>user.phone===phone);
+    const user=rememberUser({...MOCK_USER,...existing,phone,role:'user'});
+    setAuthToken(MOCK_TOKEN);return {user,token:MOCK_TOKEN};
+  },
   register: async (dto: RegisterDto): Promise<AuthResponse> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setAuthToken(MOCK_TOKEN);
-        resolve({
-          user: { ...MOCK_USER, phone: dto.phone, name: dto.name },
-          token: MOCK_TOKEN,
-        });
-      }, 600);
-    });
+    dto={...dto,phone:normalizePhone(dto.phone)};
+    if(dto.phone===ADMIN_USER.phone)throw Error("این شماره حساب مدیریت است؛ از صفحه ورود استفاده کنید.");
+    accountService.assertActive(dto.phone);
+    const user=rememberUser({...MOCK_USER,id:dto.phone,phone:dto.phone,name:dto.name,role:'user'});
+    setAuthToken(MOCK_TOKEN);return {user,token:MOCK_TOKEN};
   },
 
   sendOtp: async (dto: OtpRequestDto): Promise<OtpResponse> => {
-    return new Promise((resolve, reject) => {
+    dto={...dto,phone:normalizePhone(dto.phone)};
+    if(dto.phone!==ADMIN_USER.phone)accountService.assertActive(dto.phone);
+    verifiedPhone=null;
+    return new Promise((resolve) => {
       setTimeout(() => {
-        // Simulate occasional failure ~10% of the time
-        if (Math.random() < 0.1) {
-          reject(new Error("خطا در ارسال کد تأیید. لطفاً دوباره تلاش کنید."));
-          return;
-        }
         const code = generateOtp();
         currentOtpCode = code;
         currentOtpPhone = dto.phone;
+        otpExpiresAt=Date.now()+5*60*1000;
 
         // In mock mode we include the code so the UI can auto-fill it for testing.
         // In production this field would be omitted by the API.
@@ -79,10 +90,11 @@ export const authService = {
   },
 
   verifyOtp: async (dto: OtpVerifyDto): Promise<OtpVerifyResponse> => {
+    dto={...dto,phone:normalizePhone(dto.phone)};
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // Check that an OTP was requested for this phone
-        if (currentOtpPhone !== dto.phone) {
+        if (currentOtpPhone !== dto.phone||Date.now()>otpExpiresAt) {
           reject(new Error("کد تأیید برای این شماره درخواست نشده است. لطفاً مجدداً درخواست کنید."));
           return;
         }
@@ -93,6 +105,7 @@ export const authService = {
           return;
         }
 
+        verifiedPhone=currentOtpPhone;
         resolve({
           verified: true,
           message: "کد تأیید با موفقیت تأیید شد.",
@@ -112,6 +125,8 @@ export const authService = {
   },
 
   logout: async (): Promise<void> => {
+    verifiedPhone=null;currentOtpCode=null;currentOtpPhone=null;
+    sessionStorage.removeItem("gilaneh-mock-user");
     setAuthToken(null);
     return new Promise((resolve) => {
       setTimeout(() => resolve(), 300);
@@ -119,8 +134,8 @@ export const authService = {
   },
 
   me: async (): Promise<User> => {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(MOCK_USER), 400);
-    });
+    const user=sessionUser();if(!user)throw Error("نشست ورود معتبر نیست.");
+    if(user.role!=='admin')accountService.assertActive(user.phone);
+    return user;
   },
 };

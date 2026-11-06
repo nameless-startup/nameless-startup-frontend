@@ -21,6 +21,7 @@ export function useAuth() {
   const [otpFlow, setOtpFlow] = useState<OtpFlowState | null>(null);
 
   useEffect(() => {
+    function syncSession() {
     const token = getAuthToken();
     if (token) {
       authService
@@ -29,8 +30,14 @@ export function useAuth() {
         .catch(() => setAuthToken(null))
         .finally(() => setLoading(false));
     } else {
+      setUser(null);
       setLoading(false);
     }
+    }
+    syncSession();
+    window.addEventListener("gilaneh-auth-change", syncSession);
+    window.addEventListener("storage", syncSession);
+    return () => {window.removeEventListener("gilaneh-auth-change", syncSession);window.removeEventListener("storage", syncSession);};
   }, []);
 
   // --- Direct login (no OTP) — kept for backwards compatibility ---
@@ -79,6 +86,7 @@ export function useAuth() {
     ) => {
       setLoading(true);
       try {
+        await authService.validateCredentials(credentials,action);
         const response = await authService.sendOtp({ phone });
         setOtpFlow({
           isActive: true,

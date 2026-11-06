@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:commerce": "node --test scripts/commerce.test.cjs",
+    "test:admin": "node --test scripts/admin.test.cjs"
   },
   "dependencies": {
     "lucide-react": "^1.61.0",

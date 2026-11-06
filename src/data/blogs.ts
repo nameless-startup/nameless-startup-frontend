@@ -7,7 +7,7 @@ export const blogs: Blog[] = [
     title: "۱۰ تجربه آرام در گیلان که نباید از دست بدهید",
     excerpt:
       "از قدم زدن در بازار تا یک فنجان چای؛ ده پیشنهاد برای آرام‌تر دیدن و عمیق‌تر تجربه کردن گیلان.",
-    image: "https://picsum.photos/seed/gilan-blog-1/800/440",
+    image: "/images/blogs-1.jpg",
     author: "امینا رضایی",
     date: "۱۵ آبان ۱۴۰۳",
     readTime: "۴ دقیقه خواندن",
@@ -18,7 +18,7 @@ export const blogs: Blog[] = [
     title: "بهترین غذاهای سنتی گیلانی برای امتحان",
     excerpt:
       "از میرزاقاسمی تا باقلاقاتق؛ راهی برای آشنایی با طعم‌ها و فرهنگ سفره گیلانی.",
-    image: "https://picsum.photos/seed/gilan-blog-2/800/440",
+    image: "/images/blogs-2.jpg",
     author: "مهرانی احمدی",
     date: "۱۰ آبان ۱۴۰۳",
     readTime: "۲ دقیقه خواندن",
@@ -29,7 +29,7 @@ export const blogs: Blog[] = [
     title: "راهنمای یک گردش آرام در ماسوله",
     excerpt:
       "پیشنهادهایی برای برنامه‌ریزی، قدم زدن و تجربه یک بازدید مسئولانه در ماسوله.",
-    image: "https://picsum.photos/seed/gilan-blog-3/800/440",
+    image: "/images/blogs-3.jpg",
     author: "سارا حسینی",
     date: "۵ آبان ۱۴۰۳",
     readTime: "۲ دقیقه خواندن",
